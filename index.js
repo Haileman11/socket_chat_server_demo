@@ -5,51 +5,63 @@ io.on('connection', function (client) {
 
   console.log('client connect...', client.id);
 
-  client.on('typing', function name(data) {
-    console.log(data);
-    io.emit('typing', data)
-  })
+  // client.on('typing', function name(data) {
+  //   console.log(data);
+  //   io.emit('typing', data)
+  // })
 
-  client.on('message', function name(data) {
-    console.log(data);
-    io.emit('message', data)
-  })
+  // client.on('message', function name(data) {
+  //   console.log(data);
+  //   io.emit('message', data)
+  // })
 
-  client.on('location', function name(data) {
-    console.log(data);
-    io.emit('location', data);
-  })
+  // client.on('location', function name(data) {
+  //   console.log(data);
+  //   io.emit('location', data);
+  // })
   
-  client.on('driver_profile', function name(data) {
-    console.log(data);
-    io.emit('driver_profile', {
-      id: '1',
-      name: 'Haile',      
-      phoneNumber: 'phoneNumber',
-      isAvailable: true,
-      status: "true",
-    });
-  })
+  // client.on('driver_profile', function name(data) {
+  //   console.log(data);
+  //   io.emit('driver_profile', {
+  //     'id': '1',
+  //     'name': 'Haile',      
+  //     'phoneNumber': 'phoneNumber',
+  //     'isAvailable': true,
+  //     'status': "true",
+  //   });
+  // })
 
-  client.emit('driver_profile',"Hello"
-    // {
-    // 'id': '1',
-    // 'name': 'Haile',      
-    // 'phoneNumber': 'phoneNumber',
-    // 'isAvailable': true,
-    // 'status': "true",
-    // }
-  );
+  // client.emit('driver_availability',
+  //   {
+  //   'id': '1',
+  //   'name': 'Haile',      
+  //   'phoneNumber': 'phoneNumber',
+  //   'isAvailable': true,
+  //   'status': "true",
+  //   }
+  // );  
 
   client.on('connect', function () {
   })
 
   
-
+  client.on('driver_availability', function (isAvailable) {
+    console.log('Availability ...', isAvailable)
+    io.emit('driver_availability', {
+      'id': '1',
+      'name': 'Haile',      
+      'phoneNumber': 'phoneNumber',
+      'isAvailable': isAvailable,
+      'status': "true",
+    });
+    if (!isAvailable) {
+      client.disconnect();
+    }
+  })
   client.on('disconnect', function () {
     console.log('client disconnect...', client.id)
-    // handleDisconnect()
   })
+  
 
   client.on('error', function (err) {
     console.log('received error from client:', client.id)
