@@ -44,6 +44,47 @@ io.on('connection', function (client) {
   client.on('connect', function () {
   })
 
+  client.on('look_for_transfer_driver', function (data){
+    console.log('Looking for driver....');
+    io.emit('transfer_driver',{
+      'driver_found': true,
+      'driver_name': 'Abebaw butako',
+      'driver_phone': '+251909525760',
+    });
+    setTimeout(
+      function (){
+        console.log('DRIVER IS HERE');
+        client.emit('driver_here', {});
+      },
+      5000,
+    );
+  });
+
+  client.on('verify_transfer', function(data) {
+    console.log('Verify transfer...');
+    if (data['verification_code'] == '4321'){
+      io.emit('verify_transfer', {
+        'verified': true
+      });
+    } else {
+      io.emit('verify_transfer', {
+        'verified': false
+      });
+    }
+  });
+
+  client.on('verify_dropoff', function(data) {
+    console.log('Verify dropoff...');
+    if (data['verification_code'] == '4321'){
+      io.emit('verify_dropoff', {
+        'verified': true
+      });
+    } else {
+      io.emit('verify_dropoff', {
+        'verified': false
+      });
+    }
+  });
   
   client.on('driver_availability', function (data) {
     console.log('Availability ...', data)
@@ -86,18 +127,20 @@ io.on('connection', function (client) {
     'pickupTasks': [{
       'id': '1',
       "address": "Kazanchis, Addis Ababa",
-      'location': { "lat": 42.3599162, "lng": -71.3496743 },
+      'location': { "lat": 9.019138, "lng": 38.801672 },
       'responsiblePersonName': "Abaeb",
       'responsiblePersonPhone': "_234243",
-      'status':'pending'
+      'status':'pending',
+      'taskType':'pickup'
     }],
     'dropoffTasks': [{
-      'id': '1',
+      'id': '2',
       'address': "Bole, Addis Ababa",
-      'location': { "lat": 42.3599162, "lng": -71.3496743 },
+      'location': { "lat": 8.989743, "lng": 38.794538 },
       'responsiblePersonName': "Abaeb",
       'responsiblePersonPhone': "_234243",
-      'status':'pending'
+      'status':'pending',
+      'taskType':'dropoff'
     }],
     'route': {
       "encodedPolyline": 'olpaGj{upLwAdAi@l@m@bASd@Qd@QKW]GIo@}A{DcK{AaGi@q@UGYd@mBtBoAbAa@f@o@DKFkAH}DHaDJYN}@x@sA`Ak@jAi@`AqBlAyFzCgAPm@\\k@b@]FaALuJmOmCaDyEgGoCqEu@y@w@{@KX]r@yA|Cc@dCaEnPsFjT{Nr^gI~S{@tB}AhAMJq@Nm@Go@@OJUXMv@B`@`@t@|@ZLd@Cr@iBbFs@dBoJtL}O`UmAjB{A|A_@n@yAnAaAt@mEvDcAhAuCpEkAhBu@bBuExG{FpIgMlQaFnFoE|DwRpPsN`M_EjDY?sAr@eCv@cAJ{CKoF_@wA?m@LmBbA}@hAy@tB}BhLsAtD}JfPwA`Ew@rDg@rBq@zAuAfCs@pDm@jB_@t@_ArCSrCSzM]|UJ`HArGHlB`@vCf@bBn@hAp@v@PDVF^ZPx@b@fBnAxC~AhCvAjBlBdB`D~Cd@~@TVPAFIZUt@OdCD|@I|Bk@dCOfCHhAGvBa@|Ba@|@B~@^t@l@pAnBnBrE`B`C~ClCtAl@|BZxJKvBHp@Vt@l@fCfCfCxBpBxBt@rA^vA^~EZzEb@dBjBvC~BrB~@tCFb@]jC}@hEqEfTkJjc@yGjQgG`MwAvCy@`CmE`UkDdQ{GxVoFrTsDpSoAvLyBbTaAvFeBjH{C~LgDvLyGjT}BpK{Ft\\cAhKg@lIi@rZ_@|Pg@lJq@~HaBxLyArH{CbLuCjJsApGs@dGUzDSbJCdDMZ?BYjE[|DWbDM\\o@l@uAFo@EgAAo@GuCUaE[sGe@{BO_BAyBh@kFtBeJpFyDzBkDdA{MhC{Jv@aAOmAaAwCyCcAq@o@UsA_@uA{@iA{@iAyAcDkEoEmEqDuCqAy@gG}A{@c@uCgC{AsA][g@nA}@rBwAdD_AtBg@jAAh@yBzIQbEZpQ`D|W~@zHfArFXlCAbFLnCbBrJFrAIjCXrFAtG^lJQ~EUnFj@`IbAxDxAnEVpBE|D_@tHHhB~@xB\\h@wAtBu@dAoDdFa@`Ag@jC_AzI}AvSi@pG[tIi@lTPhD`@fEN`NFvT@fCQhBeBvGgFzKkBdG_@vBWdDg@vGsAjRiDpf@eBxd@}AhGmEdJyBzG_BfDmFlJiBjFYdBOtDOfBs@hD{D`Nu@~C[hEZbGU~JB`FVvGr@nIf@`IHpEV`Cl@fDPnCVbJj@zKCzBu@tKc@zD{@fE{BnD_A~Am@hBmAvCk@Zk@h@kBtAi@`@Tx@jBmAx@m@RW',
