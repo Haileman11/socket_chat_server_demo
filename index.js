@@ -108,6 +108,47 @@ io.on('connection', function (client) {
   client.on('connect', function () {
   })
 
+  client.on('look_for_transfer_driver', function (data){
+    console.log('Looking for driver....');
+    io.emit('transfer_driver',{
+      'driver_found': true,
+      'driver_name': 'Abebaw butako',
+      'driver_phone': '+251909525760',
+    });
+    setTimeout(
+      function (){
+        console.log('DRIVER IS HERE');
+        client.emit('driver_here', {});
+      },
+      5000,
+    );
+  });
+
+  client.on('verify_transfer', function(data) {
+    console.log('Verify transfer...');
+    if (data['verification_code'] == '4321'){
+      io.emit('verify_transfer', {
+        'verified': true
+      });
+    } else {
+      io.emit('verify_transfer', {
+        'verified': false
+      });
+    }
+  });
+
+  client.on('verify_dropoff', function(data) {
+    console.log('Verify dropoff...');
+    if (data['verification_code'] == '4321'){
+      io.emit('verify_dropoff', {
+        'verified': true
+      });
+    } else {
+      io.emit('verify_dropoff', {
+        'verified': false
+      });
+    }
+  });
   
   client.on('driver_availability', function (data) {
     console.log('Availability ...', data)
